@@ -10,7 +10,7 @@ import userAdministration.User;
 
 
 public abstract class Form extends JFrame{
-
+   
 	private static final long serialVersionUID = 1L;
 	private int backgroundColor;
 	private int xSize;

@@ -9,7 +9,7 @@ public abstract class User {
 		
 		protected User(){
 		}
-		
+		 
 		/**
 		 *sets and gets userID and role fields. For instantiating a user object with stored data.
 		 *

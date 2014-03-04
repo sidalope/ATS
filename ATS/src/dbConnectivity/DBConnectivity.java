@@ -1,5 +1,5 @@
 package dbConnectivity;
-
+ 
 public abstract class DBConnectivity {
 
 	public void read(){
