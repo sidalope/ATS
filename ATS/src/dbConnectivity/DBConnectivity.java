@@ -22,7 +22,7 @@ public abstract class DBConnectivity {
 	public void write(){
 		PreparedStatement statement = null;
 	}
-	
+	//tggsdgsdtfsdgsdgsdgsdgsdg
 	public void connect(){
 		
 		
