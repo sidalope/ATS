@@ -1,13 +1,16 @@
 package dbconnection;
 
 import java.sql.*;
+import java.util.Properties;
 import java.util.Stack;
+import java.util.logging.Level;
+import java.util.logging.Logger;
  
 public class DBConnection {
 	
-	public static Connection connection = null;
-	private Stack<Object> resultData = new Stack();
-	private ResultSet resultSet = null;
+	public static Connection connection     = null;
+	private Stack<Object> resultData        = new Stack();
+	private ResultSet resultSet             = null;
 	
 	public DBConnection(){}
         
@@ -35,16 +38,30 @@ public class DBConnection {
 	public void write(String stmtString){
 		PreparedStatement statement = null;
 		try{
-                    connect();
                     statement = connection.prepareStatement(stmtString);	
                     statement.executeUpdate();
 		} catch (SQLException sqlE){}		
 	}
 	
 	//connects to default database abpn980 on lamp.soi.city.ac.uk
-	public void connect() throws SQLException{
-			connection = DriverManager.getConnection("jdbc:mysql:https://www.lamp.soi.city.ac.uk/abpn980?user=abpn980&password=120047064");
-	}
+	public void connect() {
+            String user = "abpn980";
+            String password = "120047064";
+            
+            //try{
+            Properties connectionProps = new Properties();
+            connectionProps.put("user", user);
+            connectionProps.put("password", password);
+            try {
+                connection = DriverManager.getConnection("jdbc:mysql://www.lamp.soi.city.ac.uk/:3306/in1010grp4", connectionProps);
+            } catch (SQLException ex) {
+                Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            if (connection == null){
+                System.out.println("Connection Null");
+            }
+        }
+        //?user=abpn980&password=120047064
 	
 	public void dropConnection(){
 		if(connection != null){
@@ -52,11 +69,10 @@ public class DBConnection {
 		}
 	}
         
-        public void test() throws SQLException{
+        public void test(){
             connect();
             write("INSERT INTO Blank(blankID) VALUES (7654321)");
         }
-	
 	
 	
 	/**

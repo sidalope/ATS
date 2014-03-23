@@ -17,11 +17,7 @@ public class ATSMain {
     
         public static void main(String [ ] args) {
             DBConnection connectionObject = new DBConnection();
-            try {
-                connectionObject.connect();
-                connectionObject.test();
-            } catch (SQLException ex) {
-                Logger.getLogger(ATSMain.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            connectionObject.test();
         }
 }
+
