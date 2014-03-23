@@ -5,8 +5,7 @@
 package gui;
 
 import javax.swing.*;
-import dbConnectivity.DBConnection;
-import userAdministration.User;
+import dbconnection.DBConnection;
 
 
 public abstract class Form extends JFrame{
@@ -19,7 +18,7 @@ public abstract class Form extends JFrame{
 	private String title;
 	private JButton LogoutButton;
 	//ref User object for the session
-	public static User user;
+//	public static User user;
 	//ref connection object used throughout the session.
 	public static DBConnection connection;
 	

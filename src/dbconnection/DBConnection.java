@@ -1,4 +1,4 @@
-package dbConnectivity;
+package dbconnection;
 
 import java.sql.*;
 import java.util.Stack;
@@ -10,7 +10,9 @@ public class DBConnection {
 	private ResultSet resultSet = null;
 	
 	public DBConnection(){}
+        
 	
+        
 	/**Reads from the database if a connection is found.
 	*still needs to 'return' something through populating resultData Field.
 	*resultData should almost certainly become a stack.
@@ -33,8 +35,9 @@ public class DBConnection {
 	public void write(String stmtString){
 		PreparedStatement statement = null;
 		try{
-			connection.prepareStatement(stmtString);	
-			statement.executeUpdate();
+                    connect();
+                    statement = connection.prepareStatement(stmtString);	
+                    statement.executeUpdate();
 		} catch (SQLException sqlE){}		
 	}
 	
@@ -48,6 +51,11 @@ public class DBConnection {
 			try {connection.close();} catch (SQLException sqlE){}
 		}
 	}
+        
+        public void test() throws SQLException{
+            connect();
+            write("INSERT INTO Blank(blankID) VALUES (7654321)");
+        }
 	
 	
 	
