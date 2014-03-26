@@ -10,10 +10,12 @@ public  class DBConnection {
 	public static Connection connection     = null;
 	private Stack<Object> resultData        = new Stack();
 	private ResultSet resultSet             = null;
+        private String url;
 	
 	public DBConnection() throws SQLException{
+            url = "jdbc:mysql://localhost:8889/atsDB?user=root&password=root";
             connect();
-            this.write("INSERT INTO Blank(blankID) VALUES (765432)");
+            //this.write("INSERT INTO Blank(blankID) VALUES (765432)");
         }
         
 	
@@ -48,7 +50,7 @@ public  class DBConnection {
 	//(should) connect to default database in1010grp4 on lamp.soi.city.ac.uk
 	public final void connect() throws SQLException{
           //  try {
-                connection = DriverManager.getConnection("jdbc:mysql://localhost:8889/atsDB?user=root&password=root");
+                connection = DriverManager.getConnection(url);
           //  } catch (SQLException ex) {
           //      Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
           //  }
