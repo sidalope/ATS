@@ -13,13 +13,18 @@ import java.util.logging.Logger;
  *
  * @author abpn980
  */
-public class ATSMain {
+public class ATSMain{
     
     public ATSMain(){
-        
+        DBConnection connectionObject = new DBConnection();
+        try {
+            connectionObject.connectAndUpdate("INSERT INTO Blank(blankID) VALUES (7654321)");
+        } catch (SQLException ex) {
+            Logger.getLogger(ATSMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
         public static void main(String [ ] args) throws SQLException {
-            DBConnection connectionObject = new DBConnection();
-        }
+            
+            }
 }
 
