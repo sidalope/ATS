@@ -4,22 +4,18 @@ import java.sql.*;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
  
 public  class DBConnection {
 	
-	public static Connection connection     = null;
+	public Connection connection     = null;
 	private Stack<Object> resultData        = new Stack();
 	private ResultSet resultSet             = null;
         private String url;
 	
 	public DBConnection(){
-            url = "jdbc:mysql://localhost:8889/atsDB?user=root&password=root";
-            try {
-                connect(url);
-                //this.write("INSERT INTO Blank(blankID) VALUES (765432)");
-            } catch (SQLException ex) {
-                Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            //url = "jdbc:mysql://localhost:8889/atsDB?user=root&password=root";
+            
         }
         
 	
@@ -55,13 +51,15 @@ public  class DBConnection {
 	}
 	
 	//(should) connect to default database in1010grp4 on lamp.soi.city.ac.uk
-	public final void connect(String aUrl) throws SQLException{
-          //  try {
-                connection = DriverManager.getConnection(aUrl);
-          //  } catch (SQLException ex) {
-          //      Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
-          //  }
-            
+	public final void connectAndUpdate(String stmt) throws SQLException{
+            try {
+                url = "jdbc:mysql://lamp2010.soi.city.ac.uk:3306/abpn980?user=abpn980&password=120047064";
+                connection = DriverManager.getConnection(url);
+                connection.prepareStatement(stmt).executeUpdate();
+            } catch (SQLException ex) {
+                Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            JOptionPane.showMessageDialog(null, "message line 62");
             if (connection == null){
                 System.out.println("Connection Null");
             } else {
@@ -80,10 +78,15 @@ public  class DBConnection {
         
         /*
         public void test(){
-            connect();
+        try {
+            connect(url);
             write("INSERT INTO Blank(blankID) VALUES (7654321)");
+        } catch (SQLException ex) {
+            Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
-	*/
+        */
+}
+	
 	
 	/**
 	
@@ -120,5 +123,4 @@ public  class DBConnection {
         
 	}
 */
-		
-}
+	
