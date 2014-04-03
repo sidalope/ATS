@@ -18,7 +18,7 @@ public class ATSMain{
     public ATSMain(){
         DBConnection connectionObject = new DBConnection();
         try {
-            connectionObject.connectAndUpdate("INSERT INTO Blank(blankID) VALUES (7654321)");
+            connectionObject.connect("INSERT INTO Blank(blankID) VALUES (7654321)");
         } catch (SQLException ex) {
             Logger.getLogger(ATSMain.class.getName()).log(Level.SEVERE, null, ex);
         }
