@@ -137,9 +137,10 @@ INSERT INTO Customer VALUES
     (null, "Michael", "Mandon", "Mr", "Regular", 3, 3);
 
 INSERT INTO `User`(username, password, firstName, surname, `role`) VALUES
-    ("addmein", MD5("Greedy"), "Glara", "McJanes", "Admin"),
-    ("Jennifer", MD5("WestChance"), "Jennifer", "Alba", "Office Manager"),
-    ("Sandy", MD5("PassMyWord"), "Sandy", "Alba", "Advisor");
+    ("250", MD5("PinkMobile"), "Penelope", "Pitstop", "Travel Advisor"),
+    ("211", MD5("Gnasher"), "Dennis", "Menace", "Travel Advisor"),
+    ("220", MD5("NotiGirl"), "Minnie", "Minx", "Manager"),
+    ("320", MD5("LiesaLot"), "Arthur", "Daley", "Administrator");
 
 INSERT INTO Commission(percentage, commissionType) VALUES
     (9, "Assessable"),
