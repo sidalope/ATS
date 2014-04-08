@@ -12,10 +12,14 @@ public  class DBConnection {
 	private ResultSet resultSet             = null;
         private String url;
 	
-	public DBConnection() throws SQLException{
+	public DBConnection(){
             url = "jdbc:mysql://localhost:8889/atsDB?user=root&password=root";
-            connect();
-            //this.write("INSERT INTO Blank(blankID) VALUES (765432)");
+            try {
+                connect(url);
+                //this.write("INSERT INTO Blank(blankID) VALUES (765432)");
+            } catch (SQLException ex) {
+                Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
 	
@@ -24,13 +28,16 @@ public  class DBConnection {
 	*still needs to 'return' something through populating resultData Field.
 	*resultData should almost certainly become a stack.
 	*/
-	public void read(String stmtString) throws SQLException{
+	public void read(String stmtString){
 		PreparedStatement statement = null;
 		//ResultSet resultSet = null;
 		if(connection != null){
-			statement = connection.prepareStatement(stmtString);
-			resultSet = statement.executeQuery();
-			getResultSet();
+                    try {
+                        statement = connection.prepareStatement(stmtString);
+                        resultSet = statement.executeQuery();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
+                    }
 		}
 	}
 	public ResultSet getResultSet(){
@@ -48,9 +55,9 @@ public  class DBConnection {
 	}
 	
 	//(should) connect to default database in1010grp4 on lamp.soi.city.ac.uk
-	public final void connect() throws SQLException{
+	public final void connect(String aUrl) throws SQLException{
           //  try {
-                connection = DriverManager.getConnection(url);
+                connection = DriverManager.getConnection(aUrl);
           //  } catch (SQLException ex) {
           //      Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
           //  }
@@ -70,7 +77,7 @@ public  class DBConnection {
 			try {connection.close();} catch (SQLException sqlE){}
 		}
 	}
-        
+}
         /*
         public void test(){
             connect();
@@ -114,4 +121,3 @@ public  class DBConnection {
 	}
 */
 		
-}

@@ -8,12 +8,19 @@
 
 package gui;
 
+import dbconnection.DBConnection;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Student
  */
 public class LoginPage extends javax.swing.JFrame {
 
+    DBConnection connection;
+    
     /**
      * Creates new form NewJFrame
      */
@@ -35,14 +42,14 @@ public class LoginPage extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         staffIDTF = new javax.swing.JTextField();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        passwordTF = new javax.swing.JPasswordField();
         signIn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Air Ticket Sales System Login", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 22), new java.awt.Color(51, 102, 255))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Air Ticket Sales System Login", 0, 0, new java.awt.Font("Arial", 1, 22), new java.awt.Color(51, 102, 255))); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel1.setText("Staff ID:");
@@ -57,8 +64,13 @@ public class LoginPage extends javax.swing.JFrame {
             }
         });
 
-        jPasswordField1.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        jPasswordField1.setText("jPasswordField1");
+        passwordTF.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        passwordTF.setText("jPasswordField1");
+        passwordTF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                passwordTFActionPerformed(evt);
+            }
+        });
 
         signIn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         signIn.setText("Sign in");
@@ -80,7 +92,7 @@ public class LoginPage extends javax.swing.JFrame {
                 .addGap(35, 35, 35)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(signIn)
-                    .addComponent(jPasswordField1)
+                    .addComponent(passwordTF)
                     .addComponent(staffIDTF, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(66, Short.MAX_VALUE))
         );
@@ -94,7 +106,7 @@ public class LoginPage extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(passwordTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(signIn)
                 .addContainerGap(75, Short.MAX_VALUE))
@@ -132,13 +144,32 @@ public class LoginPage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void staffIDTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staffIDTFActionPerformed
-        // TODO add your handling code here:
+        // Do nothing
     }//GEN-LAST:event_staffIDTFActionPerformed
 
     private void signInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signInActionPerformed
         String id = staffIDTF.getText();
-        
+        String password = new String(passwordTF.getPassword());
+        //TEST System.out.println(password);
+        passwordTF.setText("");
+        //TEST System.out.println(new String(passwordTF.getPassword()));
+        //Read login info from the database and compare.
+        connection = new DBConnection();
+        connection.read("SELECT password FROM User WHERE username="+id);
+        try {
+            if(connection.getResultSet().getString(password).equals(password)){
+                new Form().setVisible(true);
+        this.dispose();
+        connection = null;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(LoginPage.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_signInActionPerformed
+
+    private void passwordTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordTFActionPerformed
+        // Do nothing
+    }//GEN-LAST:event_passwordTFActionPerformed
 
     /**
      * @param args the command line arguments
@@ -180,7 +211,7 @@ public class LoginPage extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPasswordField jPasswordField1;
+    private javax.swing.JPasswordField passwordTF;
     private javax.swing.JButton signIn;
     private javax.swing.JTextField staffIDTF;
     // End of variables declaration//GEN-END:variables

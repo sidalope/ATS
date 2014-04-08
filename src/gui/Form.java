@@ -4,8 +4,16 @@
  */
 package gui;
 
+import dbconnection.DBConnection;
 import javax.swing.*;
 import useradministration.User;
+
+/**Plan
+ * Every form inherits from Form, PURELY in the interest of limiting testing time of dynamically swapped JPanels. goddamnit.
+ * A Form.field for holding a reference to the user.
+ * A user class that holds and returns all information on a user.
+ * Logging in.
+ */
 
 /**
  *
@@ -20,16 +28,29 @@ import useradministration.User;
  */
 
 public class Form extends JFrame {
+    
+    private static DBConnection dbConnection;
+    private static User user;
 
     private static User user;
     /**
      * Creates new form Form
      */
-    public Form(/*User user*/) {
+    public Form(/**User user*/) {
         this.user = user;
         initComponents();
     }
 
+    public void logout(){
+        user = null;
+        new LoginPage().setVisible(true);
+        this.dispose();
+    }
+
+    public void exit(){
+        System.exit(0);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -58,3 +79,4 @@ public class Form extends JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 }
+
