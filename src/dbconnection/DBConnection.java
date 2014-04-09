@@ -54,7 +54,7 @@ public  class DBConnection implements Runnable{
 	*resultData should almost certainly become a stack.
 	*/
 	public void read(String stmtString){
-            
+             
 		PreparedStatement statement = null;
 		//ResultSet resultSet = null;
                 
