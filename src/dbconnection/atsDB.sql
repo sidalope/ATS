@@ -32,27 +32,28 @@ CREATE TABLE ContactDetails(
 
 CREATE TABLE DiscountPlan(
     discountPlanID INTEGER(10) AUTO_INCREMENT,
+   `alias` VARCHAR(20),
     discountRate INTEGER(3),
     discountType VARCHAR(10),
     # lower and upper bound specify the range of values for monthly expenditure within which the given rate applies.
     lowerBound Integer(7),
     upperBound Integer(7),
-    payLaterOption INTEGER(1),
     PRIMARY KEY (discountPlanID)
 );
+
+# Adding alias as a foreign key doesn't work if re-CREATEing the whole db, and must be done separately
+# ALTER TABLE DiscountPlan ADD FOREIGN KEY (`alias`) REFERENCES Customer(`alias`)
 
 CREATE TABLE Customer(
     `alias` VARCHAR(20),
     firstName VARCHAR(20),
     lastName VARCHAR(20),
-    title VARCHAR(10),
     # null, Regular, or Valued
     customerType VARCHAR(10),
     contactID INTEGER(10),
-    discountPlanID INTEGER(10),
     PRIMARY KEY (`alias`),
     FOREIGN KEY (contactID) REFERENCES ContactDetails(contactID),
-    FOREIGN KEY (discountPlanID) REFERENCES DiscountPlan(discountPlanID)
+    FOREIGN KEY (`alias`) REFERENCES DiscountPlan(customerAlias)
 );
 
 CREATE TABLE `User`(
@@ -160,3 +161,7 @@ CREATE TABLE Sale_Report(
     FOREIGN KEY (saleID) REFERENCES Sale(saleID),
     FOREIGN KEY (reportID) REFERENCES Report(reportID)
 );
+
+
+# Adding alias as a foreign key doesn't work if re-CREATEing the whole db, and must be done separately
+# ALTER TABLE DiscountPlan ADD FOREIGN KEY (`alias`) REFERENCES Customer(`alias`)

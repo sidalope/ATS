@@ -1,3 +1,156 @@
+INSERT INTO ContactDetails(contactID, addressLine1, addressLine2, county, city, country, postCode, phoneNumber) VALUES
+("1", "St Mary's Street 24", "Flat 79", "Middlesex", "London", "GB", "E34 2FG", 07983667934),
+("2", "High Street", "BAS", "East Sussex", "Battle", "GB", "TN33 0AD", 07986447267),
+("3", "Oxford Street", "Flat 61", "Westminster", "London", "GB", "W1W 8FJ", 07985439877),
+("4", "Doctor Street", "Flat 1", "Greater London", "London", "GB", "E14 8FF", 07985662881),
+("5", "Kingsland Road 149", "Flat 142", "Middlesex", "London", "GB", "E1 9FG", 07985543370);
+
+INSERT INTO DiscountPlan(discountPlanID, customerAlias, discountRate, discountType, lowerBound, upperBound) VALUES
+(1, "Chris", 1, "Fixed", NULL, NULL),
+(2, "DaveD", 1, "Flexible", 1000, 2000),
+(3, "DaveD", 2, "Flexible", 2000, NULL),
+(4, "SarahB", 2, "Fixed", NULL, NULL);
+
+INSERT INTO Customers(`alias`, firstName, lastName, customerType, contactID) VALUES
+("Chris", "Chris", "Smart", "Valued", 1),
+("DaveD", "Dave", "Dodson", "Valued", 2),
+("SarahB", "Sarah", "Broklehurst", "Valued", 3);
+
+INSERT INTO `User`(userID, password, firstName, lastName, `role`) VALUES
+(250, "PinkMobile", "Penelope", "Pitstop", "Travel Advisor"),
+(211, "Gnasher", "Dennis", "Menace", "Travel Advisor"),
+(220, "NotiGirl", "Minnie", "Minx", "Manager");
+(320, "LiesaLot", "Arthur", "Daley", "Administrator");
+
+
+
+CREATE TABLE Commission(
+    commissionRate INTEGER(10),
+    dateAdded DATE,
+    # by searching where dateRetired = null one can find all occurrances of commissionRates in use
+    dateRetired DATE,
+    # what is commissionType meant to be?
+    # commissionType VARCHAR(10),
+    PRIMARY KEY (commissionRate)
+);
+
+INSERT INTO Commission(commissionRate, dateAdded, dateRetired) VALUES
+
+
+
+
+CREATE TABLE BlankType (
+    # add a CHECK constraint
+    blankCode INTEGER(3),
+    blankType VARCHAR(15),
+    PRIMARY KEY (blankCode)
+);
+
+INSERT INTO BlankType(blankCode, blankType) VALUES
+
+
+
+CREATE TABLE Blank(
+    blankID VARCHAR(11),
+    blankStatus VARCHAR(20),
+    blankCode INTEGER(3),
+    userID INTEGER(3),
+    dateAdded DATE,
+    dateAssigned DATE,
+    PRIMARY KEY (blankID),
+    FOREIGN KEY (blankCode) REFERENCES BlankType(blankCode),
+    FOREIGN KEY (userID) REFERENCES `User`(userID)
+);
+
+INSERT INTO Blank(blankID, blankStatus, blankCode, userID, dateAdded, dateAssigned) VALUES
+
+
+
+CREATE TABLE Sale(
+    saleID INTEGER(10) AUTO_INCREMENT,
+    usdConversionFactor DECIMAL(10, 3),
+    userID INTEGER(3),
+    fareInLocalCurrency DECIMAL(10, 2),
+    taxesLocal DECIMAL (10, 2),
+    taxesOther DECIMAL (10, 2),
+    currency VARCHAR(20),
+    `date` DATE,
+    `time` TIME,
+    paymentID VARCHAR(10),
+    `alias` VARCHAR(20),    
+    blankID VARCHAR(11),
+    commissionRate INTEGER(10),
+    PRIMARY KEY (saleID),
+    FOREIGN KEY (`alias`) REFERENCES Customer(`alias`),
+    FOREIGN KEY (userID) REFERENCES `User`(userID),
+    FOREIGN KEY (blankID) REFERENCES Blank(blankID),
+    FOREIGN KEY (commissionRate) REFERENCES Commission(commissionRate)
+);
+
+INSERT INTO Sale(saleID, usdConversionFactor, userID, fareInLocalCurrency, taxeslocal, taxesOther
+currency, `date`, `time`, paymentID, `alias`, blankID, commissionRate) VALUES
+
+
+
+
+CREATE TABLE Payment (
+    paymentID INTEGER(10) AUTO_INCREMENT,
+    transactionType VARCHAR(4),
+    confirmed BIT,
+    cardType VARCHAR(20),
+    cardNumber Integer(22),
+    dateDue DATE,
+    dateReceived DATE,
+    remindersSent INTEGER(2),
+    PRIMARY KEY (paymentID)
+);
+
+INSERT INTO Payment(paymentID, transactionType, confirmed, cardType, cardNumber, dateDue,
+ dateReceived, remindersSent) VALUES
+
+
+
+
+CREATE TABLE Refund (
+    refundID INTEGER(10),
+    saleID INTEGER(10),
+    # defines whether the refund was made in full, or what amount of the original sum was refunded
+    refundedPortion VARCHAR (10),
+    PRIMARY KEY (refundID),
+    FOREIGN KEY (saleID) REFERENCES Sale(saleID)
+);
+
+INSERT INTO Refund(refundID, saleID, refundedPortion) VALUES
+
+
+
+
+
+CREATE TABLE Report(
+    reportID INTEGER(10) AUTO_INCREMENT,
+    salesOfficePlace VARCHAR(50),
+    periodStartDate DATE,
+    periodEndDate DATE,
+    `type` VARCHAR(50),
+    PRIMARY KEY (reportID)
+);
+
+INSERT INTO Report(reportID, salesOfficePlace, periodStartDate, periodEndDate, `type`) VALUES
+
+
+
+
+CREATE TABLE Sale_Report(
+    saleReportID INTEGER(10) AUTO_INCREMENT,
+    saleID INTEGER(10),
+    reportID INTEGER(10),
+    PRIMARY KEY (sale_reportID),
+    FOREIGN KEY (saleID) REFERENCES Sale(saleID),
+    FOREIGN KEY (reportID) REFERENCES Report(reportID)
+);
+
+INSERT INTO SaleReport(saleReportID) VALUES
+
 
 
 -- INSERT queries
