@@ -7,19 +7,41 @@ import java.util.logging.Logger;
  
 public  class DBConnection {
 	
-	public static Connection connection     = null;
-	private Stack<Object> resultData        = new Stack();
-	private ResultSet resultSet             = null;
+	public static Connection connection     =   null;
+	private Stack<Object> resultData        =   new Stack();
+	private ResultSet resultSet             =   null;
         private String url;
 	
-	public DBConnection(){
-            url = "jdbc:mysql://localhost:8889/atsDB?user=root&password=root";
+	public DBConnection(String url){
+            this.url = url;
             try {
                 connect(url);
+                //TEST
+                if(connection != null){
+                    System.out.println("connection OK");
+                }
                 //this.write("INSERT INTO Blank(blankID) VALUES (765432)");
             } catch (SQLException ex) {
                 Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+        
+        public DBConnection(String db, String user, String password){
+            url = "jdbc:mysql://lamp2010.soi.city.ac.uk/"+db+"?user="+user+"&password="+password;
+            try {
+                connect(url);
+                //TEST
+                if(connection != null){
+                    System.out.println("connection OK");
+                }
+                //this.write("INSERT INTO Blank(blankID) VALUES (765432)");
+            } catch (SQLException ex) {
+                Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        public DBConnection(){
+            
         }
         
 	
