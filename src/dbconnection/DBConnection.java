@@ -1,25 +1,50 @@
 package dbconnection;
 
+
+import gui.LoginPage;
 import java.sql.*;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
  
-public  class DBConnection {
+public  class DBConnection implements Runnable{
 	
-	public static Connection connection     = null;
-	private Stack<Object> resultData        = new Stack();
-	private ResultSet resultSet             = null;
+	public static Connection connection     =   null;
+	private Stack<Object> resultData        =   new Stack();
+	private ResultSet resultSet             =   null;
         private String url;
 	
-	public DBConnection(){
-            url = "jdbc:mysql://localhost:8889/atsDB?user=root&password=root";
+	public DBConnection(String url){
+            this.url = url;
             try {
                 connect(url);
+                //TEST
+                if(connection != null){
+                    System.out.println("connection OK");
+                    new LoginPage(this).setVisible(true);
+                }
                 //this.write("INSERT INTO Blank(blankID) VALUES (765432)");
             } catch (SQLException ex) {
                 Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+        
+        public DBConnection(String db, String user, String password){
+            url = "jdbc:mysql://lamp2010.soi.city.ac.uk/"+db+"?user="+user+"&password="+password;
+            try {
+                connect(url);
+                //TEST
+                if(connection != null){
+                    System.out.println("connection OK");
+                }
+                //this.write("INSERT INTO Blank(blankID) VALUES (765432)");
+            } catch (SQLException ex) {
+                Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        public DBConnection(){
+            
         }
         
 	
@@ -29,31 +54,48 @@ public  class DBConnection {
 	*resultData should almost certainly become a stack.
 	*/
 	public void read(String stmtString){
+             
 		PreparedStatement statement = null;
 		//ResultSet resultSet = null;
+                
+                
 		if(connection != null){
+                    
                     try {
                         statement = connection.prepareStatement(stmtString);
                         resultSet = statement.executeQuery();
+                        
                     } catch (SQLException ex) {
                         Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                    
 		}
 	}
-	public ResultSet getResultSet(){
-		return resultSet;
-	}
+	
 	
 	//urgent: needs exception handlers, not just catching.
 	//is having the same local variable names in read() and write() a problem? i.e. will reads and writes happen concurrently? shouldn't right?
 	public void write(String stmtString){
+            
 		PreparedStatement statement = null;
 		try{
                     statement = connection.prepareStatement(stmtString);	
                     statement.executeUpdate();
 		} catch (SQLException sqlE){}		
 	}
+        
+        
+        
+        
+        
+        public ResultSet getResultSet(){
+		return resultSet;
+	}
 	
+        
+        
+        
+        
 	//(should) connect to default database in1010grp4 on lamp.soi.city.ac.uk
 	public final void connect(String aUrl) throws SQLException{
           //  try {
@@ -63,10 +105,10 @@ public  class DBConnection {
           //  }
             
             if (connection == null){
-                System.out.println("Connection Null");
+                System.out.println("Connection Null DBConnection ln 91");
             } else {
                 if(connection != null){
-                    System.out.println("Aw yeah.");
+                    System.out.println("Connection Made - DBConnection ln 94");
                 }
             }
         }
@@ -77,47 +119,23 @@ public  class DBConnection {
 			try {connection.close();} catch (SQLException sqlE){}
 		}
 	}
+
+        @Override
+    public void run() {
+        
+    }
+    
+    
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        
+        
+        java.awt.EventQueue.invokeLater(new DBConnection(args[0]));
+        
+        
+    }
+
+    
 }
-        /*
-        public void test(){
-            connect();
-            write("INSERT INTO Blank(blankID) VALUES (7654321)");
-        }
-	*/
-	
-	/**
-	
-	public int getCredentials (String username, String password) throws SQLException{
-        Connection con = null;
-        PreparedStatement statement = null;
-       // PreparedStatement roleStatement = null;
-        ResultSet resultSet= null;
-       // ResultSet role= null;
-        
-        /**Validation defines the level of access granted
-         * Manager = 1
-         *Mechanic = 2
-         *Receptionist = 3
-         *Invalid = 0
-        
-        int validation = 0;
-        
-        try {
-            con = DriverManager.getConnection(
-            		//HOW DO I CONNECT TO THE SERVER MANAGED BY PHPMYADMIN???
-                    "https://lamp.soi.city.ac.uk/");
-            statement = con.prepareStatement("SELECT Password, JobRole FROM Users WHERE Username=\""+username+"\"");
-            //roleStatement = con.prepareStatement("");
-            resultSet = statement.executeQuery();
-            //in case of update or delete, etc. use .executeUpdate()
-	
-        } finally {
-                if(resultSet != null) {try {resultSet.close();} catch (SQLException sqlE){}}
-                if(statement != null) {try {statement.close();} catch (SQLException sqlE){}}
-                if(con != null) {try {con.close();} catch (SQLException sqlE){}}
-            }
-        return validation;
-        
-	}
-*/
-		
