@@ -32,7 +32,7 @@ CREATE TABLE ContactDetails(
 
 CREATE TABLE DiscountPlan(
     discountPlanID INTEGER(10) AUTO_INCREMENT,
-   `alias` VARCHAR(20),
+    customerAlias VARCHAR(20),
     discountRate INTEGER(3),
     discountType VARCHAR(10),
     # lower and upper bound specify the range of values for monthly expenditure within which the given rate applies.
@@ -66,7 +66,7 @@ CREATE TABLE `User`(
 );
 	
 CREATE TABLE Commission(
-    commissionRate INTEGER(10),
+    commissionRate DECIMAL(3,2),
     dateAdded DATE,
     # by searching where dateRetired = null one can find all occurrances of commissionRates in use
     dateRetired DATE,
@@ -78,7 +78,7 @@ CREATE TABLE Commission(
 CREATE TABLE BlankType (
     # add a CHECK constraint
     blankCode INTEGER(3),
-    blankType VARCHAR(15),
+    blankType VARCHAR(30),
     PRIMARY KEY (blankCode)
 );
 	
@@ -112,7 +112,6 @@ CREATE TABLE Sale(
     `date` DATE,
     `time` TIME,
     paymentID VARCHAR(10),
-    tax DECIMAL (10, 2),
     `alias` VARCHAR(20),    
     blankID VARCHAR(11),
     commissionRate INTEGER(10),
