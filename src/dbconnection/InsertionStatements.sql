@@ -19,13 +19,13 @@ INSERT INTO Customers(`alias`, firstName, lastName, customerType, contactID) VAL
 INSERT INTO `User`(userID, password, firstName, lastName, `role`) VALUES
 (250, "PinkMobile", "Penelope", "Pitstop", "Travel Advisor"),
 (211, "Gnasher", "Dennis", "Menace", "Travel Advisor"),
-(220, "NotiGirl", "Minnie", "Minx", "Manager");
+(220, "NotiGirl", "Minnie", "Minx", "Manager"),
 (320, "LiesaLot", "Arthur", "Daley", "Administrator");
 
 
 
 CREATE TABLE Commission(
-    commissionRate INTEGER(10),
+    commissionRate DECIMAL(3,2),
     dateAdded DATE,
     # by searching where dateRetired = null one can find all occurrances of commissionRates in use
     dateRetired DATE,
@@ -35,18 +35,28 @@ CREATE TABLE Commission(
 );
 
 INSERT INTO Commission(commissionRate, dateAdded, dateRetired) VALUES
-
+(5.5, 2012-01-01, NULL),
+(9.0, 2012-02-02, NULL),
+(5.0, 2012-03-03, NULL),
+(7.0, 2012-04-04, NULL);
 
 
 
 CREATE TABLE BlankType (
     # add a CHECK constraint
     blankCode INTEGER(3),
-    blankType VARCHAR(15),
+    blankType VARCHAR(30),
     PRIMARY KEY (blankCode)
 );
 
 INSERT INTO BlankType(blankCode, blankType) VALUES
+(444, "Int. Auto. 4 Coupons"),
+(440, "Int. Man. 4 Coupons"),
+(420, "Int. Man. 2 Coupons"),
+(201, "Dom. Man. 2 Coupons"),
+(101, "Dom. Man. 1 Coupon"),
+(451, "Excess Luggage"),
+(452, "Miscellaneous");
 
 
 
@@ -63,7 +73,7 @@ CREATE TABLE Blank(
 );
 
 INSERT INTO Blank(blankID, blankStatus, blankCode, userID, dateAdded, dateAssigned) VALUES
-
+()
 
 
 CREATE TABLE Sale(
