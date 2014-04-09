@@ -1,7 +1,11 @@
+USE abpn980;
+
 SET storage_engine=INNODB;
 
 DROP TABLE IF EXISTS Sale_Report;
 DROP TABLE IF EXISTS Report;
+DROP TABLE IF EXISTS Refund;
+DROP TABLE IF EXISTS Payment;
 DROP TABLE IF EXISTS Sale;
 DROP TABLE IF EXISTS Blank;
 DROP TABLE IF EXISTS BlankType;
@@ -10,95 +14,135 @@ DROP TABLE IF EXISTS `User`;
 DROP TABLE IF EXISTS Customer;
 DROP TABLE IF EXISTS DiscountPlan;
 DROP TABLE IF EXISTS Address;
+DROP TABLE IF EXISTS ContactDetails;
 
-CREATE TABLE Address(
-    addressID INTEGER(10) AUTO_INCREMENT, 
+
+CREATE TABLE ContactDetails(
+    contactID INTEGER(10) AUTO_INCREMENT, 
     addressLine1 VARCHAR(50), 
     addressLine2 VARCHAR(50), 
     county VARCHAR(50), 
     city VARCHAR(50), 
     country VARCHAR(50), 
     postCode VARCHAR(8),
-    PRIMARY KEY (addressID)
+    phoneNumber VARCHAR(15),
+    PRIMARY KEY (contactID)
 );
 
 
 CREATE TABLE DiscountPlan(
     discountPlanID INTEGER(10) AUTO_INCREMENT,
-    percentage DECIMAL(10, 2),
+    discountRate INTEGER(3),
     discountType VARCHAR(10),
-    howAwarded VARCHAR(50),
+    # lower and upper bound specify the range of values for monthly expenditure within which the given rate applies.
+    lowerBound Integer(7),
+    upperBound Integer(7),
     payLaterOption INTEGER(1),
     PRIMARY KEY (discountPlanID)
 );
 
 CREATE TABLE Customer(
-    customerID INTEGER(10) AUTO_INCREMENT,
+    `alias` VARCHAR(20),
     firstName VARCHAR(20),
     lastName VARCHAR(20),
     title VARCHAR(10),
-    `type` VARCHAR(10),
-    addressID INTEGER(10),
+    # null, Regular, or Valued
+    customerType VARCHAR(10),
+    contactID INTEGER(10),
     discountPlanID INTEGER(10),
-    PRIMARY KEY (customerID),
-    FOREIGN KEY (addressID) REFERENCES Address(addressID),
+    PRIMARY KEY (`alias`),
+    FOREIGN KEY (contactID) REFERENCES ContactDetails(contactID),
     FOREIGN KEY (discountPlanID) REFERENCES DiscountPlan(discountPlanID)
 );
 
 CREATE TABLE `User`(
-    username VARCHAR(20),
+    userID INTEGER(3),
     password VARCHAR(20),
     firstName VARCHAR(20),
-    surname VARCHAR(20),
+    lastName VARCHAR(20),
     `role` VARCHAR(20),
-    PRIMARY KEY (username)
+    PRIMARY KEY (userID)
 );
 	
 CREATE TABLE Commission(
-    commissionID INTEGER(10) AUTO_INCREMENT,
-    percentage DECIMAL(10, 2),
-    commissionType VARCHAR(10),
-    PRIMARY KEY (commissionID)
+    commissionRate INTEGER(10),
+    dateAdded DATE,
+    # by searching where dateRetired = null one can find all occurrances of commissionRates in use
+    dateRetired DATE,
+    # what is commissionType meant to be?
+    # commissionType VARCHAR(10),
+    PRIMARY KEY (commissionRate)
+);
+
+CREATE TABLE BlankType (
+    # add a CHECK constraint
+    blankCode INTEGER(3),
+    blankType VARCHAR(15),
+    PRIMARY KEY (blankCode)
 );
 	
-CREATE TABLE BlankType(
-    blankTypeID VARCHAR(3),
-    blankType VARCHAR(10),
-    numberOfCoupons INTEGER(10),
-    PRIMARY KEY (blankTypeID)
-);
+# CREATE TABLE BlankType(
+  #   blankTypeID VARCHAR(3),
+  #  blankType VARCHAR(10),
+  #  numberOfCoupons INTEGER(10),
+  #  PRIMARY KEY (blankTypeID)
+# );
 	
 CREATE TABLE Blank(
     blankID VARCHAR(11),
     blankStatus VARCHAR(20),
-    blankTypeID VARCHAR(3),
-    username VARCHAR(20),
+    blankCode INTEGER(3),
+    userID INTEGER(3),
+    dateAdded DATE,
+    dateAssigned DATE,
     PRIMARY KEY (blankID),
-    FOREIGN KEY (blankTypeID) REFERENCES BlankType(blankTypeID),
-    FOREIGN KEY (username) REFERENCES `User`(username)
+    FOREIGN KEY (blankCode) REFERENCES BlankType(blankCode),
+    FOREIGN KEY (userID) REFERENCES `User`(userID)
 );
 
 CREATE TABLE Sale(
     saleID INTEGER(10) AUTO_INCREMENT,
-    price DECIMAL(10, 2),
+    usdConversionFactor DECIMAL(10, 3),
+    userID INTEGER(3),
+    fareInLocalCurrency DECIMAL(10, 2),
+    taxesLocal DECIMAL (10, 2),
+    taxesOther DECIMAL (10, 2),
     currency VARCHAR(20),
-    valueInUSD DECIMAL(10, 2),
     `date` DATE,
     `time` TIME,
-    paymentType VARCHAR(10),
+    paymentID VARCHAR(10),
     tax DECIMAL (10, 2),
-    customerID INTEGER(10),
-    username VARCHAR(20),
+    `alias` VARCHAR(20),    
     blankID VARCHAR(11),
-    commissionID INTEGER(10),
-    refunded BIT,
+    commissionRate INTEGER(10),
     PRIMARY KEY (saleID),
-    FOREIGN KEY (customerID) REFERENCES Customer(customerID),
-    FOREIGN KEY (username) REFERENCES `User`(username),
+    FOREIGN KEY (`alias`) REFERENCES Customer(`alias`),
+    FOREIGN KEY (userID) REFERENCES `User`(userID),
     FOREIGN KEY (blankID) REFERENCES Blank(blankID),
-    FOREIGN KEY (commissionID) REFERENCES Commission(commissionID)
+    FOREIGN KEY (commissionRate) REFERENCES Commission(commissionRate)
+);
+
+CREATE TABLE Payment (
+    paymentID INTEGER(10) AUTO_INCREMENT,
+    transactionType VARCHAR(4),
+    confirmed BIT,
+    cardType VARCHAR(20),
+    cardNumber Integer(22),
+    dateDue DATE,
+    dateReceived DATE,
+    remindersSent INTEGER(2),
+    PRIMARY KEY (paymentID)
 );
 	
+CREATE TABLE Refund (
+    refundID INTEGER(10),
+    saleID INTEGER(10),
+    # defines whether the refund was made in full, or what amount of the original sum was refunded
+    refundedPortion VARCHAR (10),
+    PRIMARY KEY (refundID),
+    FOREIGN KEY (saleID) REFERENCES Sale(saleID)
+);
+
 CREATE TABLE Report(
     reportID INTEGER(10) AUTO_INCREMENT,
     salesOfficePlace VARCHAR(50),
