@@ -7,7 +7,7 @@ import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
  
-public  class DBConnection {
+public  class DBConnection implements Runnable{
 	
 	public static Connection connection     =   null;
 	private Stack<Object> resultData        =   new Stack();
@@ -21,6 +21,7 @@ public  class DBConnection {
                 //TEST
                 if(connection != null){
                     System.out.println("connection OK");
+                    new LoginPage(this).setVisible(true);
                 }
                 //this.write("INSERT INTO Blank(blankID) VALUES (765432)");
             } catch (SQLException ex) {
@@ -53,31 +54,48 @@ public  class DBConnection {
 	*resultData should almost certainly become a stack.
 	*/
 	public void read(String stmtString){
+            
 		PreparedStatement statement = null;
 		//ResultSet resultSet = null;
+                
+                
 		if(connection != null){
+                    
                     try {
                         statement = connection.prepareStatement(stmtString);
                         resultSet = statement.executeQuery();
+                        
                     } catch (SQLException ex) {
                         Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                    
 		}
 	}
-	public ResultSet getResultSet(){
-		return resultSet;
-	}
+	
 	
 	//urgent: needs exception handlers, not just catching.
 	//is having the same local variable names in read() and write() a problem? i.e. will reads and writes happen concurrently? shouldn't right?
 	public void write(String stmtString){
+            
 		PreparedStatement statement = null;
 		try{
                     statement = connection.prepareStatement(stmtString);	
                     statement.executeUpdate();
 		} catch (SQLException sqlE){}		
 	}
+        
+        
+        
+        
+        
+        public ResultSet getResultSet(){
+		return resultSet;
+	}
 	
+        
+        
+        
+        
 	//(should) connect to default database in1010grp4 on lamp.soi.city.ac.uk
 	public final void connect(String aUrl) throws SQLException{
           //  try {
@@ -87,10 +105,10 @@ public  class DBConnection {
           //  }
             
             if (connection == null){
-                System.out.println("Connection Null");
+                System.out.println("Connection Null DBConnection ln 91");
             } else {
                 if(connection != null){
-                    System.out.println("Aw yeah.");
+                    System.out.println("Connection Made - DBConnection ln 94");
                 }
             }
         }
@@ -102,6 +120,10 @@ public  class DBConnection {
 		}
 	}
 
+        @Override
+    public void run() {
+        
+    }
     
     
     /**
@@ -109,5 +131,11 @@ public  class DBConnection {
      */
     public static void main(String[] args) {
         
+        
+        java.awt.EventQueue.invokeLater(new DBConnection(args[0]));
+        
+        
     }
+
+    
 }

@@ -41,7 +41,7 @@ public class Form extends JFrame {
 
     public void logout(){
         user = null;
-        new LoginPage().setVisible(true);
+        new LoginPage(dbConnection).setVisible(true);
         this.dispose();
     }
 
