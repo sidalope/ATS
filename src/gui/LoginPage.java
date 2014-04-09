@@ -19,14 +19,14 @@ import java.util.logging.Logger;
  */
 public class LoginPage extends javax.swing.JFrame {
 
-    DBConnection connection;
+    DBConnection connectionObject;
     
     /**
      * Creates new form NewJFrame
      */
-    public LoginPage() {
+    public LoginPage(DBConnection con) {
         initComponents();
-        connection = new DBConnection();
+        connectionObject = con;
     }
 
     /**
@@ -50,7 +50,7 @@ public class LoginPage extends javax.swing.JFrame {
 
         jPanel3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Air Ticket Sales System Login", 0, 0, new java.awt.Font("Arial", 1, 22), new java.awt.Color(51, 102, 255))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Air Ticket Sales System Login", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 22), new java.awt.Color(51, 102, 255))); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel1.setText("Staff ID:");
@@ -67,11 +67,6 @@ public class LoginPage extends javax.swing.JFrame {
 
         passwordTF.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         passwordTF.setText("jPasswordField1");
-        passwordTF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                passwordTFActionPerformed(evt);
-            }
-        });
 
         signIn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         signIn.setText("Sign in");
@@ -149,23 +144,43 @@ public class LoginPage extends javax.swing.JFrame {
     }//GEN-LAST:event_staffIDTFActionPerformed
 
     private void signInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signInActionPerformed
-        String id = staffIDTF.getText();
-        String password = new String(passwordTF.getPassword());
-        //TEST System.out.println(password);
-        passwordTF.setText("");
-        //TEST System.out.println(new String(passwordTF.getPassword()));
-        //Read login info from the database and compare.
-        connection = new DBConnection();
-        connection.read("SELECT password FROM User WHERE username="+id);
-        try {        
-            if(connection.getResultSet().getString(password).equals(password)){
-                new Form().setVisible(true);
-        this.dispose();
-        connection = null;
+        
+        if(!staffIDTF.getText().equals("") && staffIDTF.getText() != null){
+            
+            String id = staffIDTF.getText();
+            String password = new String(passwordTF.getPassword());
+            passwordTF.setText("");
+            
+            System.out.println(id);
+            System.out.println(password);
+                        
+            connectionObject.read("SELECT password FROM User WHERE userID="+id);
+            try {
+                System.out.println(connectionObject.getResultSet().getString(password));
+                
+                /*
+                try {   
+
+                    if(connectionObject.getResultSet().getString(password).equals(password)){
+                        new Form().setVisible(true);
+                        this.dispose();
+                        connectionObject = null;
+                    }
+
+                } catch (SQLException ex) {
+                    Logger.getLogger(LoginPage.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                */
+            } catch (SQLException ex) {
+                Logger.getLogger(LoginPage.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(LoginPage.class.getName()).log(Level.SEVERE, null, ex);
+            
+            
+        } else {
+            System.out.println("User id not specified");
         }
+       
+        
         
     }//GEN-LAST:event_signInActionPerformed
 
@@ -173,50 +188,6 @@ public class LoginPage extends javax.swing.JFrame {
         // Do nothing
     }//GEN-LAST:event_passwordTFActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) throws SQLException {
-        //* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(LoginPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(LoginPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(LoginPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(LoginPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        
-        
-        
-        if(args.length != 1){
-            System.out.println("Main Method arguments runtime exception");
-        } else {
-            String url = args[0];
-        }
-        
-        
-        
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new LoginPage().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
