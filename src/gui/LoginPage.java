@@ -157,7 +157,7 @@ public class LoginPage extends javax.swing.JFrame {
         //Read login info from the database and compare.
         connection = new DBConnection();
         connection.read("SELECT password FROM User WHERE username="+id);
-        try {
+        try {        
             if(connection.getResultSet().getString(password).equals(password)){
                 new Form().setVisible(true);
         this.dispose();
@@ -166,6 +166,7 @@ public class LoginPage extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(LoginPage.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }//GEN-LAST:event_signInActionPerformed
 
     private void passwordTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordTFActionPerformed
@@ -176,7 +177,7 @@ public class LoginPage extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) throws SQLException {
-        /* Set the Nimbus look and feel */
+        //* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
@@ -205,7 +206,6 @@ public class LoginPage extends javax.swing.JFrame {
             System.out.println("Main Method arguments runtime exception");
         } else {
             String url = args[0];
-            new DBConnection(url);
         }
         
         

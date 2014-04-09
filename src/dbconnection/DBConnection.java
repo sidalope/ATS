@@ -1,5 +1,7 @@
 package dbconnection;
 
+
+import gui.LoginPage;
 import java.sql.*;
 import java.util.Stack;
 import java.util.logging.Level;
@@ -99,47 +101,13 @@ public  class DBConnection {
 			try {connection.close();} catch (SQLException sqlE){}
 		}
 	}
+
+    
+    
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        
+    }
 }
-        /*
-        public void test(){
-            connect();
-            write("INSERT INTO Blank(blankID) VALUES (7654321)");
-        }
-	*/
-	
-	/**
-	
-	public int getCredentials (String username, String password) throws SQLException{
-        Connection con = null;
-        PreparedStatement statement = null;
-       // PreparedStatement roleStatement = null;
-        ResultSet resultSet= null;
-       // ResultSet role= null;
-        
-        /**Validation defines the level of access granted
-         * Manager = 1
-         *Mechanic = 2
-         *Receptionist = 3
-         *Invalid = 0
-        
-        int validation = 0;
-        
-        try {
-            con = DriverManager.getConnection(
-            		//HOW DO I CONNECT TO THE SERVER MANAGED BY PHPMYADMIN???
-                    "https://lamp.soi.city.ac.uk/");
-            statement = con.prepareStatement("SELECT Password, JobRole FROM Users WHERE Username=\""+username+"\"");
-            //roleStatement = con.prepareStatement("");
-            resultSet = statement.executeQuery();
-            //in case of update or delete, etc. use .executeUpdate()
-	
-        } finally {
-                if(resultSet != null) {try {resultSet.close();} catch (SQLException sqlE){}}
-                if(statement != null) {try {statement.close();} catch (SQLException sqlE){}}
-                if(con != null) {try {con.close();} catch (SQLException sqlE){}}
-            }
-        return validation;
-        
-	}
-*/
-		
