@@ -205,7 +205,9 @@ public class LoginPage extends javax.swing.JFrame {
             System.out.println("Main Method arguments runtime exception");
         } else {
             String url = args[0];
+            new DBConnection(url);
         }
+        
         
         
         /* Create and display the form */
