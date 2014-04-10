@@ -2,7 +2,7 @@ USE abpn980;
 
 SET storage_engine=INNODB;
 
-DROP TABLE IF EXISTS Sale_Report;
+DROP TABLE IF EXISTS SaleReport;
 DROP TABLE IF EXISTS Report;
 DROP TABLE IF EXISTS Refund;
 DROP TABLE IF EXISTS Payment;
@@ -11,9 +11,8 @@ DROP TABLE IF EXISTS Blank;
 DROP TABLE IF EXISTS BlankType;
 DROP TABLE IF EXISTS Commission;
 DROP TABLE IF EXISTS `User`;
-DROP TABLE IF EXISTS Customer;
 DROP TABLE IF EXISTS DiscountPlan;
-DROP TABLE IF EXISTS Address;
+DROP TABLE IF EXISTS Customer;
 DROP TABLE IF EXISTS ContactDetails;
 
 
@@ -29,17 +28,6 @@ CREATE TABLE ContactDetails(
     PRIMARY KEY (contactID)
 );
 
-CREATE TABLE DiscountPlan(
-    discountPlanID INTEGER(10) UNSIGNED AUTO_INCREMENT,
-    customerAlias VARCHAR(20),
-    discountRate INTEGER(3),
-    discountType VARCHAR(10),
-    # lower and upper bound specify the range of values for monthly expenditure within which the given rate applies.
-    lowerBound Integer(7),
-    upperBound Integer(7),
-    PRIMARY KEY (discountPlanID)
-);
-
 CREATE TABLE Customer(
     customerAlias VARCHAR(20),
     firstName VARCHAR(20),
@@ -48,7 +36,18 @@ CREATE TABLE Customer(
     contactID INTEGER(10) UNSIGNED,
     PRIMARY KEY (customerAlias),
     FOREIGN KEY (contactID) REFERENCES ContactDetails(contactID)
-    # FOREIGN KEY (customerAlias) REFERENCES DiscountPlan(customerAlias)
+);
+
+CREATE TABLE DiscountPlan(
+    discountPlanID INTEGER(10) UNSIGNED AUTO_INCREMENT,
+    customerAlias VARCHAR(20),
+    discountRate INTEGER(3),
+    discountType VARCHAR(10),
+    # lower and upper bound specify the range of values for monthly expenditure within which the given rate applies.
+    lowerBound Integer(7) UNSIGNED,
+    upperBound Integer(7) UNSIGNED,
+    PRIMARY KEY (discountPlanID),
+    FOREIGN KEY (customerAlias) REFERENCES Customer(customerAlias)
 );
 
 CREATE TABLE `User`(
@@ -102,12 +101,12 @@ CREATE TABLE Sale(
     paymentID VARCHAR(10),
     customerAlias VARCHAR(20),    
     blankID VARCHAR(11),
-    commissionRate INTEGER(10),
+    commissionRate DECIMAL(3,2) UNSIGNED,
     PRIMARY KEY (saleID),
-    FOREIGN KEY (customerAlias) REFERENCES Customer(customerAlias),
-    FOREIGN KEY (userID) REFERENCES `User`(userID),
     FOREIGN KEY (blankID) REFERENCES Blank(blankID),
-    FOREIGN KEY (commissionRate) REFERENCES Commission(commissionRate)
+    FOREIGN KEY (commissionRate) REFERENCES Commission(commissionRate),
+    FOREIGN KEY (userID) REFERENCES `User`(userID),
+    FOREIGN KEY (customerAlias) REFERENCES Customer(customerAlias)
 );
 
 CREATE TABLE Payment (
@@ -140,11 +139,11 @@ CREATE TABLE Report(
     PRIMARY KEY (reportID)
 );
 
-CREATE TABLE Sale_Report(
+CREATE TABLE SaleReport(
     saleReportID INTEGER(10) UNSIGNED AUTO_INCREMENT,
     saleID INTEGER(10) UNSIGNED,
     reportID INTEGER(10) UNSIGNED,
-    PRIMARY KEY (sale_reportID),
+    PRIMARY KEY (saleReportID),
     FOREIGN KEY (saleID) REFERENCES Sale(saleID),
     FOREIGN KEY (reportID) REFERENCES Report(reportID)
 );
