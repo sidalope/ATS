@@ -8,6 +8,8 @@ import dbconnection.DBConnection;
 import javax.swing.*;
 import useradministration.User;
 
+
+
 /**Plan
  * Every form inherits from Form, PURELY in the interest of limiting testing time of dynamically swapped JPanels. Goddamnit.
  * A Form.field for holding a reference to the user.

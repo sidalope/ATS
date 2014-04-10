@@ -5,9 +5,10 @@
 package dbconnection;
 
 /**
- *
+ * 
  * @author abpn980
  */
+
 public class StmtCreator {
     
     private String statement444 = "INSERT INTO Blank(blankID, blankStatus, blankCode, userID, dateAdded, dateAssigned) VALUES ";

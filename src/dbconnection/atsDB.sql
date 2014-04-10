@@ -17,7 +17,8 @@ DROP TABLE IF EXISTS Address;
 DROP TABLE IF EXISTS ContactDetails;
 
 
-CREATE TABLE ContactDetails(
+
+CREATE TABLE ContactDetails( 
     contactID INTEGER(10) AUTO_INCREMENT, 
     addressLine1 VARCHAR(50), 
     addressLine2 VARCHAR(50), 
