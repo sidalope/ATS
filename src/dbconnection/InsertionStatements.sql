@@ -118,7 +118,7 @@ CREATE TABLE Sale(
     FOREIGN KEY (blankID) REFERENCES Blank(blankID),
     FOREIGN KEY (commissionRate) REFERENCES Commission(commissionRate),
     FOREIGN KEY (userID) REFERENCES `User`(userID),
-    FOREIGN KEY (customerAlias) REFERENCES Customer(customerAlias)
+    FOREIGN KEY (customerAlias) REFERENCES Customer(customerAlias),
     FOREIGN KEY (paymentID) REFERENCES Payment(paymentID)
 );
 
