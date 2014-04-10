@@ -88,27 +88,6 @@ CREATE TABLE Blank(
     FOREIGN KEY (userID) REFERENCES `User`(userID)
 );
 
-CREATE TABLE Sale(
-    saleID INTEGER(10) UNSIGNED AUTO_INCREMENT,
-    usdConversionFactor DECIMAL(10, 3) UNSIGNED,
-    userID INTEGER(3) UNSIGNED,
-    fareInLocalCurrency DECIMAL(10, 2) UNSIGNED,
-    taxesLocal DECIMAL (10, 2) UNSIGNED,
-    taxesOther DECIMAL (10, 2) UNSIGNED,
-    currency VARCHAR(20),
-    `date` DATE,
-    `time` TIME,
-    paymentID VARCHAR(10),
-    customerAlias VARCHAR(20),    
-    blankID VARCHAR(11),
-    commissionRate DECIMAL(3,2) UNSIGNED,
-    PRIMARY KEY (saleID),
-    FOREIGN KEY (blankID) REFERENCES Blank(blankID),
-    FOREIGN KEY (commissionRate) REFERENCES Commission(commissionRate),
-    FOREIGN KEY (userID) REFERENCES `User`(userID),
-    FOREIGN KEY (customerAlias) REFERENCES Customer(customerAlias)
-);
-
 CREATE TABLE Payment (
     paymentID INTEGER(10) UNSIGNED AUTO_INCREMENT,
     transactionType VARCHAR(4),
@@ -119,6 +98,28 @@ CREATE TABLE Payment (
     dateReceived DATE,
     remindersSent INTEGER(2) UNSIGNED,
     PRIMARY KEY (paymentID)
+);
+
+CREATE TABLE Sale(
+    saleID INTEGER(10) UNSIGNED AUTO_INCREMENT,
+    usdConversionFactor DECIMAL(10, 3) UNSIGNED,
+    userID INTEGER(3) UNSIGNED,
+    fareInLocalCurrency DECIMAL(10, 2) UNSIGNED,
+    taxesLocal DECIMAL (10, 2) UNSIGNED,
+    taxesOther DECIMAL (10, 2) UNSIGNED,
+    currency VARCHAR(20),
+    `date` DATE,
+    `time` TIME,
+    paymentID INTEGER(10),
+    customerAlias VARCHAR(20),    
+    blankID VARCHAR(11),
+    commissionRate DECIMAL(3,2) UNSIGNED,
+    PRIMARY KEY (saleID),
+    FOREIGN KEY (blankID) REFERENCES Blank(blankID),
+    FOREIGN KEY (commissionRate) REFERENCES Commission(commissionRate),
+    FOREIGN KEY (userID) REFERENCES `User`(userID),
+    FOREIGN KEY (customerAlias) REFERENCES Customer(customerAlias)
+    FOREIGN KEY (paymentID) REFERENCES Payment(paymentID)
 );
 
 CREATE TABLE Refund (
@@ -198,6 +199,14 @@ INSERT INTO Blank(blankID, blankStatus, blankCode, userID, dateAdded, dateAssign
 
 INSERT INTO Sale(saleID, usdConversionFactor, userID, fareInLocalCurrency, taxeslocal, taxesOther
 currency, `date`, `time`, paymentID, customerAlias, blankID, commissionRate) VALUES
+(1, 0.54, 250, 220.00, 23.00, 35.00, "GBP", '2014-01-01', '10:56:34', 1, "SarahB", 44400000001, 5.5),
+(2, 0.54, 250, 86.00, 15.60, NULL, "GBP", '2014-01-01', '11:00:45', 2, NULL, 20100000001, 5.0),
+(3, 0.43, 250, 220.00, 63.00, 75.00, "GBP", '2014-02-02', '09:50:51', 3, "DaveD", 44400000003, 5.5),
+(4, 0.43, 250, 230.00, 23.00, 35.00, "GBP", '2014-02-02', '13:35:06:', 4, "Chris", 44400000004, 9.0),
+(5, 0.43, 250, 75.00, 13.80, NULL, "GBP", '2014-02-02', '10:26:05', 5, NULL, 20100000002, 5.0),
+(6, 0.43, 211, 250.00, 25.00, 35.00, "GBP", '2014-02-02', '13:05:34', 6, "SarahB", 44400000021, 7.0),
+(7, 0.43, 211, 300.00, 28.00, 37.00, "GBP", '2014-02-02', '09:12:11', 7, NULL, 44400000022, 9.0),
+(8, 0.43, 211, 75.00, 13.80, NULL, "GBP", '2014-02-02', '14:09:43', 8, NULL, 44400000011, 5.0);
 
 INSERT INTO Payment(paymentID, transactionType, confirmed, cardType, cardNumber, dateDue,
  dateReceived, remindersSent) VALUES
